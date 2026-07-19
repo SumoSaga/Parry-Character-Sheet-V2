@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PARRY — a dark fantasy TTRPG</title>
+<meta name="description" content="Parry: a dark-fantasy tabletop RPG of duels, guard-breaks, and hard-won victories.">
+<style>
+/* ===== PARRY — shared site styling =====
+   Palette: cold steel & ash, lit by ember firelight, cool blue counterpoint. */
+:root{
+  --void:#101317; --panel:#1c2024; --panel2:#242a2e; --panel3:#171b1f;
+  --line:#343c43; --line2:#4d5860;
+  --ink:#eae8e3; --dim:#b3babf; --faint:#8d959b;
+  --gold:#c9702f; --gold2:#efa661;
+  --ember:#c9682c; --blood:#bf4429;
+  --ash:#8fb0d4;
+}
+*{box-sizing:border-box}
+html,body{background:var(--void)}
+body{
+  margin:0;color:var(--ink);
+  font:16px/1.6 "Iowan Old Style","Palatino Linotype","Georgia",serif;
+  background:
+    radial-gradient(1300px 760px at 50% -12%, #3a2c22 0%, transparent 60%),
+    radial-gradient(1000px 560px at 50% 112%, #1b242c 0%, transparent 62%),
+    var(--void);
+  background-attachment:fixed;
+}
+h1,h2,h3,h4{font-family:"Cinzel","Trajan Pro","Georgia",serif;margin:0;letter-spacing:.12em}
+a{color:var(--gold2);text-decoration:none}
+a:hover{color:#ffd9a8}
+
+/* ---- nav ---- */
+.nav{
+  position:sticky;top:0;z-index:40;backdrop-filter:blur(6px);
+  background:linear-gradient(180deg,rgba(16,19,23,.96),rgba(16,19,23,.82));
+  border-bottom:1px solid var(--line2);
+}
+.nav .in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:26px;padding:13px 20px;flex-wrap:wrap}
+.nav .brand{font-family:"Cinzel",Georgia,serif;font-size:19px;letter-spacing:.3em;color:var(--gold2);text-transform:uppercase}
+.nav a.lnk{
+  font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);
+  padding-bottom:2px;border-bottom:1px solid transparent
+}
+.nav a.lnk:hover{color:var(--gold2)}
+.nav a.lnk.on{color:var(--gold2);border-bottom-color:var(--gold)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:34px 20px 70px}
+.narrow{max-width:900px}
+
+/* ---- headings ---- */
+h1.page{font-size:34px;color:var(--gold2);text-transform:uppercase;text-shadow:0 0 22px rgba(201,112,47,.28)}
+.lede{color:var(--dim);font-size:17px;font-style:italic;margin-top:10px;max-width:70ch}
+h2.sec{
+  font-size:13px;color:var(--gold);text-transform:uppercase;letter-spacing:.26em;
+  padding-bottom:8px;margin:44px 0 18px;border-bottom:1px solid var(--line2);position:relative
+}
+h2.sec::after{content:"";position:absolute;left:0;bottom:-1px;width:46px;height:1px;background:var(--gold)}
+h3.sub{font-size:16px;color:var(--ink);margin:26px 0 8px;letter-spacing:.08em}
+
+.rule{display:flex;align-items:center;gap:12px;margin:34px 0;color:var(--line2)}
+.rule::before,.rule::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent)}
+.rule i{width:7px;height:7px;transform:rotate(45deg);background:var(--gold);opacity:.55;display:block}
+
+/* ---- panels & cards ---- */
+.panel{
+  background:linear-gradient(180deg,var(--panel) 0%,var(--panel3) 100%);
+  border:1px solid var(--line);border-radius:3px;padding:22px;position:relative;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03), 0 8px 24px rgba(0,0,0,.5);
+}
+.panel::before,.panel::after{content:"";position:absolute;width:10px;height:10px;border:1px solid var(--line2);opacity:.8}
+.panel::before{top:5px;left:5px;border-right:0;border-bottom:0}
+.panel::after{bottom:5px;right:5px;border-left:0;border-top:0}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:26px}
+.card{
+  display:block;background:linear-gradient(180deg,var(--panel),var(--panel3));
+  border:1px solid var(--line);border-radius:3px;padding:22px;transition:all .16s ease
+}
+.card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.5)}
+.card .t{font-family:"Cinzel",Georgia,serif;font-size:17px;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase}
+.card .d{color:var(--dim);font-size:14px;margin-top:8px;line-height:1.5}
+
+/* ---- tables ---- */
+table{width:100%;border-collapse:collapse;margin:14px 0 6px;font-size:14.5px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{
+  font-family:"Cinzel",Georgia,serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);border-bottom-color:var(--line2)
+}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+td.c{color:var(--gold2);font-family:"Cinzel",Georgia,serif;white-space:nowrap}
+td em,li em{color:var(--ash);font-style:normal}
+.stat{color:var(--gold2);font-family:"Cinzel",Georgia,serif;white-space:nowrap}
+
+/* ---- lists / entries ---- */
+ul{padding-left:20px}
+li{margin-bottom:8px}
+.entry{border-left:2px solid var(--gold);padding:4px 0 4px 14px;margin-bottom:20px;
+  background:linear-gradient(90deg,rgba(201,112,47,.05),transparent)}
+.entry .n{font-family:"Cinzel",Georgia,serif;font-size:16px;color:var(--ink);letter-spacing:.08em}
+.entry .m{color:var(--gold2);font-size:13.5px;margin:3px 0 5px}
+.entry .x{color:var(--dim);font-size:14px}
+.tag{display:inline-block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ash);border:1px solid var(--line2);border-radius:2px;padding:2px 8px;margin-left:8px}
+.note{color:var(--dim);font-size:14px;font-style:italic}
+.callout{border:1px solid var(--line2);background:var(--panel3);border-radius:2px;padding:16px 18px;margin:18px 0;color:var(--dim)}
+.callout b{color:var(--gold2);font-style:normal}
+
+.foot{border-top:1px solid var(--line);margin-top:60px;padding:22px 0 0;color:var(--faint);font-size:13px;text-align:center}
+
+@media (max-width:700px){
+  .nav .in{gap:14px}
+  h1.page{font-size:26px}
+}
+@media print{
+  body{background:#fff;color:#000}
+  .nav,.foot{display:none}
+  .panel,.card{background:#fff;border-color:#999;box-shadow:none}
+  h1.page,h2.sec,.card .t,.entry .n{color:#000;text-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="in">
+  <span class="brand">Parry</span>
+  <a class="lnk on" href="index.html">Home</a>
+  <a class="lnk" href="sheet.html">Character Sheet</a>
+  <a class="lnk" href="rules.html">Rules</a>
+  <a class="lnk" href="gear.html">Gear</a>
+  <a class="lnk" href="traits.html">Traits</a>
+</div></nav>
+
+<div class="wrap">
+
+  <h1 class="page">⚔ Parry</h1>
+  <p class="lede">A dark-fantasy tabletop RPG of duels, guard-breaks, and hard-won victories. Every roll is an exchange — you and your foe both throw dice, and the gap between them decides everything.</p>
+
+  <div class="rule"><i></i></div>
+
+  <div class="panel">
+    <h3 class="sub" style="margin-top:0">The idea</h3>
+    <p style="color:var(--dim)">Most systems ask "did you hit?" Parry asks <b style="color:var(--ink)">how well</b> — and then hands you that answer as currency to spend. Beat their guard by a hair and you land a glancing blow. Beat it soundly and you can wound them, disarm them, or drive them off a ledge. Read their swing perfectly and your blades bind, turning the fight on its head.</p>
+    <p style="color:var(--dim)">It takes its ethos from Souls-likes: menacing foes, deliberate combat, greed that gets punished — and the feeling that when the monster finally falls, <b style="color:var(--ink)">you earned it.</b></p>
+  </div>
+
+  <h2 class="sec">The core loop</h2>
+
+  <h3 class="sub">1 · Roll against each other</h3>
+  <p style="color:var(--dim)">The attacker rolls <span class="stat">d20 + attribute + weapon</span>. Lesser foes have a static defense value; named foes and bosses roll their own defense against you. The <b>difference</b> between the two numbers is the result.</p>
+
+  <h3 class="sub">2 · Spend the margin</h3>
+  <table>
+    <thead><tr><th>Margin over their defense</th><th>Points earned</th></tr></thead>
+    <tbody>
+      <tr><td>1–4 — a glancing blow</td><td class="c">1 point</td></tr>
+      <tr><td>5–9 — a solid hit</td><td class="c">2 points</td></tr>
+      <tr><td>10+ — a devastating blow</td><td class="c">3 points</td></tr>
+    </tbody>
+  </table>
+  <p style="color:var(--dim)">Spend points on <b>Strike</b> for damage — or on maneuvers: <em>Shove, Opening, Feint, Disarm, Trip, Drive Back, Sunder, Rally,</em> or a lasting <b>Wound</b>. One roll, and a real decision every single time.</p>
+
+  <h3 class="sub">3 · Press your luck</h3>
+  <p style="color:var(--dim)">Roll <b>even</b> and your side keeps acting. Roll <b>odd</b> and the spotlight flips to the enemy — whether you hit or not. Every extra swing is a gamble, and the opposition's turn is paid for out of the actions you took to get there.</p>
+
+  <h3 class="sub">4 · Break their guard</h3>
+  <p style="color:var(--dim)">Bosses don't die by attrition. Pressure fills their <b>Poise</b>; when it breaks they're <b>staggered</b> — guard open, taking double damage, while your party unloads a burst of uninterruptible actions. Break the giant, <i>then</i> punish it.</p>
+
+  <div class="callout">
+    <b>The Perfect Parry.</b> When both dice come up the same natural number, the blow is turned and initiative snaps back to the defender's side. Against a boss, it shatters their guard outright.
+  </div>
+
+  <h2 class="sec">Start here</h2>
+  <div class="cards">
+    <a class="card" href="sheet.html">
+      <div class="t">Character Sheet</div>
+      <div class="d">Interactive and self-calculating. Build a character, track Grit and Armor with clickable pips, and keep a live maneuver reference at your elbow.</div>
+    </a>
+    <a class="card" href="rules.html">
+      <div class="t">Rules</div>
+      <div class="d">The full core: opposed rolls, margins and maneuvers, Setups, initiative, Grit and Wounds, and the Poise system for bosses.</div>
+    </a>
+    <a class="card" href="gear.html">
+      <div class="t">Gear</div>
+      <div class="d">Weapons, shields and armor — each with a stat line and a trained-only Expertise verb that changes how it fights.</div>
+    </a>
+    <a class="card" href="traits.html">
+      <div class="t">Traits</div>
+      <div class="d">A swappable loadout of features that defines your playstyle. Your weapon is your moveset; your traits are who you are.</div>
+    </a>
+  </div>
+
+  <div class="foot">Parry — a Revelry project · in active development</div>
+</div>
+</body>
+</html>

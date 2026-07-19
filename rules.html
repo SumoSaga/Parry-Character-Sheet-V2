@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rules — PARRY</title>
+<style>
+/* ===== PARRY — shared site styling =====
+   Palette: cold steel & ash, lit by ember firelight, cool blue counterpoint. */
+:root{
+  --void:#101317; --panel:#1c2024; --panel2:#242a2e; --panel3:#171b1f;
+  --line:#343c43; --line2:#4d5860;
+  --ink:#eae8e3; --dim:#b3babf; --faint:#8d959b;
+  --gold:#c9702f; --gold2:#efa661;
+  --ember:#c9682c; --blood:#bf4429;
+  --ash:#8fb0d4;
+}
+*{box-sizing:border-box}
+html,body{background:var(--void)}
+body{
+  margin:0;color:var(--ink);
+  font:16px/1.6 "Iowan Old Style","Palatino Linotype","Georgia",serif;
+  background:
+    radial-gradient(1300px 760px at 50% -12%, #3a2c22 0%, transparent 60%),
+    radial-gradient(1000px 560px at 50% 112%, #1b242c 0%, transparent 62%),
+    var(--void);
+  background-attachment:fixed;
+}
+h1,h2,h3,h4{font-family:"Cinzel","Trajan Pro","Georgia",serif;margin:0;letter-spacing:.12em}
+a{color:var(--gold2);text-decoration:none}
+a:hover{color:#ffd9a8}
+
+/* ---- nav ---- */
+.nav{
+  position:sticky;top:0;z-index:40;backdrop-filter:blur(6px);
+  background:linear-gradient(180deg,rgba(16,19,23,.96),rgba(16,19,23,.82));
+  border-bottom:1px solid var(--line2);
+}
+.nav .in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:26px;padding:13px 20px;flex-wrap:wrap}
+.nav .brand{font-family:"Cinzel",Georgia,serif;font-size:19px;letter-spacing:.3em;color:var(--gold2);text-transform:uppercase}
+.nav a.lnk{
+  font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);
+  padding-bottom:2px;border-bottom:1px solid transparent
+}
+.nav a.lnk:hover{color:var(--gold2)}
+.nav a.lnk.on{color:var(--gold2);border-bottom-color:var(--gold)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:34px 20px 70px}
+.narrow{max-width:900px}
+
+/* ---- headings ---- */
+h1.page{font-size:34px;color:var(--gold2);text-transform:uppercase;text-shadow:0 0 22px rgba(201,112,47,.28)}
+.lede{color:var(--dim);font-size:17px;font-style:italic;margin-top:10px;max-width:70ch}
+h2.sec{
+  font-size:13px;color:var(--gold);text-transform:uppercase;letter-spacing:.26em;
+  padding-bottom:8px;margin:44px 0 18px;border-bottom:1px solid var(--line2);position:relative
+}
+h2.sec::after{content:"";position:absolute;left:0;bottom:-1px;width:46px;height:1px;background:var(--gold)}
+h3.sub{font-size:16px;color:var(--ink);margin:26px 0 8px;letter-spacing:.08em}
+
+.rule{display:flex;align-items:center;gap:12px;margin:34px 0;color:var(--line2)}
+.rule::before,.rule::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent)}
+.rule i{width:7px;height:7px;transform:rotate(45deg);background:var(--gold);opacity:.55;display:block}
+
+/* ---- panels & cards ---- */
+.panel{
+  background:linear-gradient(180deg,var(--panel) 0%,var(--panel3) 100%);
+  border:1px solid var(--line);border-radius:3px;padding:22px;position:relative;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03), 0 8px 24px rgba(0,0,0,.5);
+}
+.panel::before,.panel::after{content:"";position:absolute;width:10px;height:10px;border:1px solid var(--line2);opacity:.8}
+.panel::before{top:5px;left:5px;border-right:0;border-bottom:0}
+.panel::after{bottom:5px;right:5px;border-left:0;border-top:0}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:26px}
+.card{
+  display:block;background:linear-gradient(180deg,var(--panel),var(--panel3));
+  border:1px solid var(--line);border-radius:3px;padding:22px;transition:all .16s ease
+}
+.card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.5)}
+.card .t{font-family:"Cinzel",Georgia,serif;font-size:17px;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase}
+.card .d{color:var(--dim);font-size:14px;margin-top:8px;line-height:1.5}
+
+/* ---- tables ---- */
+table{width:100%;border-collapse:collapse;margin:14px 0 6px;font-size:14.5px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{
+  font-family:"Cinzel",Georgia,serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);border-bottom-color:var(--line2)
+}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+td.c{color:var(--gold2);font-family:"Cinzel",Georgia,serif;white-space:nowrap}
+td em,li em{color:var(--ash);font-style:normal}
+.stat{color:var(--gold2);font-family:"Cinzel",Georgia,serif;white-space:nowrap}
+
+/* ---- lists / entries ---- */
+ul{padding-left:20px}
+li{margin-bottom:8px}
+.entry{border-left:2px solid var(--gold);padding:4px 0 4px 14px;margin-bottom:20px;
+  background:linear-gradient(90deg,rgba(201,112,47,.05),transparent)}
+.entry .n{font-family:"Cinzel",Georgia,serif;font-size:16px;color:var(--ink);letter-spacing:.08em}
+.entry .m{color:var(--gold2);font-size:13.5px;margin:3px 0 5px}
+.entry .x{color:var(--dim);font-size:14px}
+.tag{display:inline-block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ash);border:1px solid var(--line2);border-radius:2px;padding:2px 8px;margin-left:8px}
+.note{color:var(--dim);font-size:14px;font-style:italic}
+.callout{border:1px solid var(--line2);background:var(--panel3);border-radius:2px;padding:16px 18px;margin:18px 0;color:var(--dim)}
+.callout b{color:var(--gold2);font-style:normal}
+
+.foot{border-top:1px solid var(--line);margin-top:60px;padding:22px 0 0;color:var(--faint);font-size:13px;text-align:center}
+
+@media (max-width:700px){
+  .nav .in{gap:14px}
+  h1.page{font-size:26px}
+}
+@media print{
+  body{background:#fff;color:#000}
+  .nav,.foot{display:none}
+  .panel,.card{background:#fff;border-color:#999;box-shadow:none}
+  h1.page,h2.sec,.card .t,.entry .n{color:#000;text-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="in">
+  <span class="brand">Parry</span>
+  <a class="lnk" href="index.html">Home</a>
+  <a class="lnk" href="sheet.html">Character Sheet</a>
+  <a class="lnk on" href="rules.html">Rules</a>
+  <a class="lnk" href="gear.html">Gear</a>
+  <a class="lnk" href="traits.html">Traits</a>
+</div></nav>
+
+<div class="wrap narrow">
+
+  <h1 class="page">Rules</h1>
+  <p class="lede">Everything that happens in a fight, from the first swing to the last breath.</p>
+
+  <h2 class="sec">The Opposed Roll</h2>
+  <p style="color:var(--dim)">When a character attacks, they roll <span class="stat">d20 + ability modifier + weapon Atk</span>. The GM then does one of two things:</p>
+  <ul style="color:var(--dim)">
+    <li><b>Minor threats</b> have a <b>static defense value</b>, compared directly against the attacker's roll.</li>
+    <li><b>Named foes and bosses</b> <b>roll their own defense</b> — <span class="stat">d20 + ability + weapon Def + shield + armor</span> — against the attacker's roll.</li>
+  </ul>
+  <p style="color:var(--dim)">If the defense value is higher, the attack <b>misses</b>. Otherwise, compare the difference.</p>
+
+  <h3 class="sub">Margins of Success</h3>
+  <table>
+    <thead><tr><th>Difference in the attacker's favor</th><th>Points</th></tr></thead>
+    <tbody>
+      <tr><td>1–4 &nbsp;<span class="note">(e.g. 14 vs 10)</span></td><td class="c">1</td></tr>
+      <tr><td>5–9 &nbsp;<span class="note">(e.g. 18 vs 10)</span></td><td class="c">2</td></tr>
+      <tr><td>10+ &nbsp;<span class="note">(e.g. 22 vs 10)</span></td><td class="c">3</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <b>A Perfect Parry.</b> When the natural values of both dice are <b>identical</b>, the attack is parried — it deals no damage and applies no effects. Initiative immediately swings to the defender's side, regardless of how many actions the other side had banked, and that defender must take the next action. Against a boss, a Perfect Parry also <b>fills their Poise gauge instantly</b>, staggering them.
+  </div>
+
+  <h2 class="sec">Openings &amp; Setups</h2>
+  <p style="color:var(--dim)">No roll should ever be wasted. When a character attacks and <b>misses</b>, the target is considered distracted blocking that blow, and takes a penalty to their defense equal to the attack modifier of the character who missed.</p>
+  <p style="color:var(--dim)">A Setup lasts only until the <b>next action is taken</b> — used or not — then it's gone. It rewards immediate follow-up, encourages teamwork, and costs almost nothing to track.</p>
+
+  <h2 class="sec">Maneuvers</h2>
+  <p style="color:var(--dim)">Spend your points on any combination below. <b>Strike</b> is simply the option that buys damage.</p>
+
+  <h3 class="sub">Melee Maneuvers</h3>
+  <table>
+    <thead><tr><th style="width:60px">Cost</th><th>Maneuver</th></tr></thead>
+    <tbody>
+      <tr><td class="c">1</td><td><b>Strike</b> — Deals 1 Grit.</td></tr>
+      <tr><td class="c">1</td><td><b>Shove</b> — Move the target 5 ft. <em>+5 ft per point of Strength.</em></td></tr>
+      <tr><td class="c">1</td><td><b>Opening</b> — Arm a −2 Setup on the target. <em>−1 more per point of Dexterity.</em></td></tr>
+      <tr><td class="c">1</td><td><b>Feint</b> — Your next attack on the target has advantage. <em>An attack benefiting from Feint can't Feint again.</em></td></tr>
+      <tr><td class="c">2</td><td><b>Disarm</b> — The target's weapon drops; recovering it costs an action if they stay put. <em>Flung +5 ft per point of Dexterity.</em></td></tr>
+      <tr><td class="c">2</td><td><b>Trip</b> — Knock the target prone.</td></tr>
+      <tr><td class="c">2</td><td><b>Drive Back</b> — Move the target 10 ft. <em>+5 ft per point of Strength.</em></td></tr>
+      <tr><td class="c">2</td><td><b>Sunder</b> — Burn one of the target's Armor Slots.</td></tr>
+      <tr><td class="c">2</td><td><b>Rally</b> — You or an ally within reach clears 1 Grit or gains a Hope. <em>+1 per point of Charisma.</em></td></tr>
+      <tr><td class="c">3</td><td><b>Wound</b> — Inflict a Wound; you name its functional effect.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Ranged Maneuvers</h3>
+  <table>
+    <thead><tr><th style="width:60px">Cost</th><th>Maneuver</th></tr></thead>
+    <tbody>
+      <tr><td class="c">1</td><td><b>Strike</b> — Deals 1 Grit.</td></tr>
+      <tr><td class="c">1</td><td><b>Suppress</b> — The target takes −2 on their next action roll if they move from where they stand.</td></tr>
+      <tr><td class="c">1</td><td><b>Mark</b> — Arm a Setup on the target. <em>−1 more per point of Dexterity.</em></td></tr>
+      <tr><td class="c">2</td><td><b>Disarm</b> — The target's weapon drops; recovering it costs an action if they stay put.</td></tr>
+      <tr><td class="c">2</td><td><b>Sunder</b> — Burn one of the target's Armor Slots.</td></tr>
+      <tr><td class="c">2</td><td><b>Trip</b> — Knock the target prone.</td></tr>
+      <tr><td class="c">2</td><td><b>Knockback</b> — Throw the target back 10 ft. <em>+5 ft per point of Strength.</em></td></tr>
+      <tr><td class="c">2</td><td><b>Rally</b> — You or an ally within reach clears 1 Grit or gains a Hope. <em>+1 per point of Charisma.</em></td></tr>
+      <tr><td class="c">3</td><td><b>Wound</b> — Inflict a Wound; you name its functional effect.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="sec">Movement</h2>
+  <p style="color:var(--dim)">A character may move <b>once each turn for free</b>, up to their movement speed. Moving again requires an <b>Athletics test of 16 or higher</b>; on a success you move again — and add an action to the opposition's pool.</p>
+  <div class="callout">
+    <b>Driven into obstacles.</b> If you are moved forcefully and collide with a solid, immovable object, you take <b>1 Grit for every 10 ft you were unable to travel</b> in that direction.
+  </div>
+
+  <h2 class="sec">Attributes</h2>
+  <p style="color:var(--dim)">Characters begin with <b>five points</b> distributed across six attributes. No attribute may exceed <b>3</b> at level one. Each point grants +1 to rolls using that attribute.</p>
+  <table>
+    <thead><tr><th style="width:150px">Attribute</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td class="c">Strength</td><td>Attack and defend with Heavy/Medium weapons · +5 ft to Shove and Drive Back per point</td></tr>
+      <tr><td class="c">Dexterity</td><td>Attack and defend with Light/Medium weapons · +5 ft movement per point · +1 to Opening's Setup and +5 ft to Disarm per point</td></tr>
+      <tr><td class="c">Intelligence</td><td>+1 Expertise per point</td></tr>
+      <tr><td class="c">Willpower</td><td>+1 Grit per point</td></tr>
+      <tr><td class="c">Awareness</td><td>Attack and defend with Ranged weapons</td></tr>
+      <tr><td class="c">Charisma</td><td>+1 Grit or Hope restored by Rally per point</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="sec">Grit, Armor &amp; Wounds</h2>
+  <p style="color:var(--dim)"><b>Grit</b> is your health — a track of <span class="stat">5 + Willpower</span>. Fill it and you are downed, and must immediately make a <b>Death Move</b>.</p>
+  <p style="color:var(--dim)"><b>Armor Slots</b> come from your armor and shield. Spend one reactively to <b>reduce an incoming injury by one tier.</b> They're recovered through rests and repairs.</p>
+  <p style="color:var(--dim)"><b>Wounds</b> are lasting harm. Each Wound you carry <b>lowers your maximum Grit by 1</b> until it is treated, on top of whatever functional effect it inflicts.</p>
+
+  <h2 class="sec">Poise — Breaking a Boss</h2>
+  <p style="color:var(--dim)">Menacing creatures have a strong guard and take persistent pressure to open up. This is their <b>Poise Gauge.</b> Landing an attack raises it:</p>
+  <ul style="color:var(--dim)">
+    <li><b>Dealing Grit</b> — 1 point of Poise per point of Grit dealt.</li>
+    <li><b>Moving the target</b> — 1 point of Poise per 10 ft moved.</li>
+  </ul>
+  <p style="color:var(--dim)">Armor still counts: even when a boss reduces Grit with Armor Slots, the blow <b>still raises their Poise</b> — armor delays the damage, not the guard-break.</p>
+
+  <div class="callout">
+    <b>Staggered.</b> When the gauge fills, the boss's guard is open until it takes its next turn — and it must spend that <b>entire turn recovering</b>, resetting Poise to zero. While staggered it takes <b>double damage</b>, and the players gain a number of actions equal to their party size, divided as they choose, which <b>cannot shift initiative</b> even when rolled with Fear.
+  </div>
+  <p style="color:var(--dim)">A boss's Poise gauge also <b>decreases by 1</b> each time initiative shifts back to them — let up, and they recover their footing.</p>
+
+  <div class="foot">Parry — a Revelry project · rules in active development</div>
+</div>
+</body>
+</html>

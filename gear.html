@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gear — PARRY</title>
+<style>
+/* ===== PARRY — shared site styling =====
+   Palette: cold steel & ash, lit by ember firelight, cool blue counterpoint. */
+:root{
+  --void:#101317; --panel:#1c2024; --panel2:#242a2e; --panel3:#171b1f;
+  --line:#343c43; --line2:#4d5860;
+  --ink:#eae8e3; --dim:#b3babf; --faint:#8d959b;
+  --gold:#c9702f; --gold2:#efa661;
+  --ember:#c9682c; --blood:#bf4429;
+  --ash:#8fb0d4;
+}
+*{box-sizing:border-box}
+html,body{background:var(--void)}
+body{
+  margin:0;color:var(--ink);
+  font:16px/1.6 "Iowan Old Style","Palatino Linotype","Georgia",serif;
+  background:
+    radial-gradient(1300px 760px at 50% -12%, #3a2c22 0%, transparent 60%),
+    radial-gradient(1000px 560px at 50% 112%, #1b242c 0%, transparent 62%),
+    var(--void);
+  background-attachment:fixed;
+}
+h1,h2,h3,h4{font-family:"Cinzel","Trajan Pro","Georgia",serif;margin:0;letter-spacing:.12em}
+a{color:var(--gold2);text-decoration:none}
+a:hover{color:#ffd9a8}
+
+/* ---- nav ---- */
+.nav{
+  position:sticky;top:0;z-index:40;backdrop-filter:blur(6px);
+  background:linear-gradient(180deg,rgba(16,19,23,.96),rgba(16,19,23,.82));
+  border-bottom:1px solid var(--line2);
+}
+.nav .in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:26px;padding:13px 20px;flex-wrap:wrap}
+.nav .brand{font-family:"Cinzel",Georgia,serif;font-size:19px;letter-spacing:.3em;color:var(--gold2);text-transform:uppercase}
+.nav a.lnk{
+  font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);
+  padding-bottom:2px;border-bottom:1px solid transparent
+}
+.nav a.lnk:hover{color:var(--gold2)}
+.nav a.lnk.on{color:var(--gold2);border-bottom-color:var(--gold)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:34px 20px 70px}
+.narrow{max-width:900px}
+
+/* ---- headings ---- */
+h1.page{font-size:34px;color:var(--gold2);text-transform:uppercase;text-shadow:0 0 22px rgba(201,112,47,.28)}
+.lede{color:var(--dim);font-size:17px;font-style:italic;margin-top:10px;max-width:70ch}
+h2.sec{
+  font-size:13px;color:var(--gold);text-transform:uppercase;letter-spacing:.26em;
+  padding-bottom:8px;margin:44px 0 18px;border-bottom:1px solid var(--line2);position:relative
+}
+h2.sec::after{content:"";position:absolute;left:0;bottom:-1px;width:46px;height:1px;background:var(--gold)}
+h3.sub{font-size:16px;color:var(--ink);margin:26px 0 8px;letter-spacing:.08em}
+
+.rule{display:flex;align-items:center;gap:12px;margin:34px 0;color:var(--line2)}
+.rule::before,.rule::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent)}
+.rule i{width:7px;height:7px;transform:rotate(45deg);background:var(--gold);opacity:.55;display:block}
+
+/* ---- panels & cards ---- */
+.panel{
+  background:linear-gradient(180deg,var(--panel) 0%,var(--panel3) 100%);
+  border:1px solid var(--line);border-radius:3px;padding:22px;position:relative;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03), 0 8px 24px rgba(0,0,0,.5);
+}
+.panel::before,.panel::after{content:"";position:absolute;width:10px;height:10px;border:1px solid var(--line2);opacity:.8}
+.panel::before{top:5px;left:5px;border-right:0;border-bottom:0}
+.panel::after{bottom:5px;right:5px;border-left:0;border-top:0}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:26px}
+.card{
+  display:block;background:linear-gradient(180deg,var(--panel),var(--panel3));
+  border:1px solid var(--line);border-radius:3px;padding:22px;transition:all .16s ease
+}
+.card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.5)}
+.card .t{font-family:"Cinzel",Georgia,serif;font-size:17px;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase}
+.card .d{color:var(--dim);font-size:14px;margin-top:8px;line-height:1.5}
+
+/* ---- tables ---- */
+table{width:100%;border-collapse:collapse;margin:14px 0 6px;font-size:14.5px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{
+  font-family:"Cinzel",Georgia,serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);border-bottom-color:var(--line2)
+}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+td.c{color:var(--gold2);font-family:"Cinzel",Georgia,serif;white-space:nowrap}
+td em,li em{color:var(--ash);font-style:normal}
+.stat{color:var(--gold2);font-family:"Cinzel",Georgia,serif;white-space:nowrap}
+
+/* ---- lists / entries ---- */
+ul{padding-left:20px}
+li{margin-bottom:8px}
+.entry{border-left:2px solid var(--gold);padding:4px 0 4px 14px;margin-bottom:20px;
+  background:linear-gradient(90deg,rgba(201,112,47,.05),transparent)}
+.entry .n{font-family:"Cinzel",Georgia,serif;font-size:16px;color:var(--ink);letter-spacing:.08em}
+.entry .m{color:var(--gold2);font-size:13.5px;margin:3px 0 5px}
+.entry .x{color:var(--dim);font-size:14px}
+.tag{display:inline-block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ash);border:1px solid var(--line2);border-radius:2px;padding:2px 8px;margin-left:8px}
+.note{color:var(--dim);font-size:14px;font-style:italic}
+.callout{border:1px solid var(--line2);background:var(--panel3);border-radius:2px;padding:16px 18px;margin:18px 0;color:var(--dim)}
+.callout b{color:var(--gold2);font-style:normal}
+
+.foot{border-top:1px solid var(--line);margin-top:60px;padding:22px 0 0;color:var(--faint);font-size:13px;text-align:center}
+
+@media (max-width:700px){
+  .nav .in{gap:14px}
+  h1.page{font-size:26px}
+}
+@media print{
+  body{background:#fff;color:#000}
+  .nav,.foot{display:none}
+  .panel,.card{background:#fff;border-color:#999;box-shadow:none}
+  h1.page,h2.sec,.card .t,.entry .n{color:#000;text-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="in">
+  <span class="brand">Parry</span>
+  <a class="lnk" href="index.html">Home</a>
+  <a class="lnk" href="sheet.html">Character Sheet</a>
+  <a class="lnk" href="rules.html">Rules</a>
+  <a class="lnk on" href="gear.html">Gear</a>
+  <a class="lnk" href="traits.html">Traits</a>
+</div></nav>
+
+<div class="wrap narrow">
+
+  <h1 class="page">Gear</h1>
+  <p class="lede">Your weapon is your moveset. Every piece has a stat line anyone can use — and an <em>(Expertise)</em> verb that only opens up once you're trained in it.</p>
+
+  <div class="callout">
+    <b>How to read a weapon.</b> <span class="stat">Atk</span> is added to your attack rolls, <span class="stat">Def</span> to your defense rolls — both on top of the ability modifier matching the weapon's class (<em>Heavy → Strength, Medium → Strength or Dexterity, Light → Dexterity, Ranged → Awareness</em>). Only your <b>primary</b> weapon contributes its stats; shields and armor add or subtract on top.
+  </div>
+
+  <h2 class="sec">Light Weapons <span class="tag">Dexterity</span></h2>
+
+  <div class="entry"><div class="n">Dagger</div><div class="m">Atk +1 / Def +1 · one-handed</div><div class="x">
+    <em>Concealable:</em> advantage on rolls to hide or draw it discreetly. <em>Throwable:</em> 15/30 ft.<br>
+    <b>(Expertise) Opening:</b> on a successful hit, you arm a Setup on the target.</div></div>
+
+  <div class="entry"><div class="n">Rapier</div><div class="m">Atk +1 / Def +2 · one-handed</div><div class="x">
+    <em>Defensive:</em> you may use the Guard action as a free action once each turn.<br>
+    <b>(Expertise) Masterful Guard:</b> your rolled d20 may count as one higher or lower when checking for a Perfect Parry.</div></div>
+
+  <div class="entry"><div class="n">Paring Blade</div><div class="m">Atk +1 / Def +1 · off-hand</div><div class="x">
+    <em>Off-hand:</em> while dual-wielding, once per turn you may arm a Setup on a target in melee range.<br>
+    <b>(Expertise) Pairing:</b> while dual-wielding, add this weapon's stats to the primary weapon in your other hand.</div></div>
+
+  <div class="entry"><div class="n">Hand Axe</div><div class="m">Atk +2 / Def +0 · one-handed</div><div class="x">
+    <em>Throwable:</em> 30/60 ft.<br>
+    <b>(Expertise) At the Ready:</b> draw and stow as a free action; a successful throw arms a Setup on the target.</div></div>
+
+  <div class="entry"><div class="n">Shortbow</div><div class="m">Atk +2 / Def +0 <span class="note">(−3 in melee)</span> · two-handed · 60/100 ft</div><div class="x">
+    <em>Reload:</em> requires an action to attack again.<br>
+    <b>(Expertise) Swift Quiver:</b> ignore the Reload trait.</div></div>
+
+  <h2 class="sec">Medium Weapons <span class="tag">Strength or Dexterity</span></h2>
+
+  <div class="entry"><div class="n">Shortsword</div><div class="m">Atk +2 / Def +2 · one-handed</div><div class="x">
+    <em>Off-hand:</em> while dual-wielding, once per turn you may arm a Setup in melee range.<br>
+    <b>(Expertise) Versatile:</b> as an action, shift between <b>Aggressive</b> (Atk +3 / Def +1) and <b>Defensive</b> (Atk +1 / Def +3).</div></div>
+
+  <div class="entry"><div class="n">Mace</div><div class="m">Atk +2 / Def +1 · one-handed</div><div class="x">
+    <em>Impact:</em> reducing this weapon's damage costs <b>two</b> Armor Slots.<br>
+    <b>(Expertise) Guard Break:</b> if you inflict at least 2 Grit, the target rolls its next attack at disadvantage.</div></div>
+
+  <div class="entry"><div class="n">Spear</div><div class="m">Atk +2 / Def +2 · one-handed · reach 10 ft</div><div class="x">
+    <b>(Expertise) Holding Ground:</b> when a target enters your attack range, you arm a Setup on it.</div></div>
+
+  <div class="entry"><div class="n">Saber</div><div class="m">Atk +2 / Def +2 · one-handed</div><div class="x">
+    <em>Quick Draw:</em> draw this weapon as a free action.<br>
+    <b>(Expertise) Redirect:</b> when you successfully defend against an attack, arm a Setup on the attacker — this can stack with itself.</div></div>
+
+  <div class="entry"><div class="n">Longbow</div><div class="m">Atk +3 / Def 0 <span class="note">(−3 in melee)</span> · two-handed · 100/150 ft</div><div class="x">
+    <em>Reload:</em> requires an action to attack again.<br>
+    <b>(Expertise) Aim:</b> once per turn you may aim as a free action.</div></div>
+
+  <h2 class="sec">Heavy Weapons <span class="tag">Strength</span></h2>
+
+  <div class="entry"><div class="n">Long Sword</div><div class="m">Atk +3 / Def +1 · two-handed</div><div class="x">
+    <em>Versatile:</em> may be wielded one-handed for Atk +2 / Def +2.<br>
+    <b>(Expertise) Redouble:</b> when your attack misses by 3 or less, spend a Hope to immediately attack the same target again at disadvantage.</div></div>
+
+  <div class="entry"><div class="n">Warhammer</div><div class="m">Atk +3 / Def −2 · two-handed</div><div class="x">
+    <em>Shieldbreaker:</em> targets gain no defense bonus from equipped shields against this weapon.<br>
+    <b>(Expertise) Stagger:</b> on a successful attack with a margin of 10+, the target cannot spend Armor Slots against attacks until their next turn.</div></div>
+
+  <div class="entry"><div class="n">Poleaxe</div><div class="m">Atk +3 / Def +1 · two-handed · reach 15 ft</div><div class="x">
+    <b>(Expertise) Hook:</b> on a successful hit, choose to arm a Setup or knock the target prone.</div></div>
+
+  <div class="entry"><div class="n">Battleaxe</div><div class="m">Atk +3 / Def +0 · two-handed</div><div class="x">
+    <em>Demolition:</em> deals double damage against objects.<br>
+    <b>(Expertise) Rend:</b> on a successful hit you may spend 2 points to inflict a <b>Bleeding Wound</b> — the target loses 1 Grit at the start of each of its turns until treated (DC 16).</div></div>
+
+  <div class="entry"><div class="n">Crossbow</div><div class="m">Atk +3 / Def +0 <span class="note">(−2 in melee)</span> · two-handed · 60/100 ft</div><div class="x">
+    <em>Reload:</em> requires an action to attack again.<br>
+    <b>(Expertise) Braced Shot:</b> if you didn't move, ignore Reload; and if you inflict a Wound, you also inflict 1 Grit.</div></div>
+
+  <h2 class="sec">Shields</h2>
+  <table>
+    <thead><tr><th>Shield</th><th>Def</th><th>Armor Slots</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><b>Buckler</b></td><td class="c">+1</td><td class="c">1</td><td>—</td></tr>
+      <tr><td><b>Heater Shield</b></td><td class="c">+2</td><td class="c">2</td><td>one-handed · −5 ft movement</td></tr>
+      <tr><td><b>Pavise Shield</b></td><td class="c">+3</td><td class="c">3</td><td>one-handed · −10 ft movement</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="sec">Armor</h2>
+  <table>
+    <thead><tr><th>Armor</th><th>Def</th><th>Armor Slots</th><th>(Expertise)</th></tr></thead>
+    <tbody>
+      <tr><td><b>Padded Leather</b></td><td class="c">+0</td><td class="c">1</td><td><em>Presentable</em></td></tr>
+      <tr><td><b>Chainmail</b></td><td class="c">−1</td><td class="c">2</td><td><em>Trained:</em> lose the −1 Def penalty</td></tr>
+      <tr><td><b>Platemail</b></td><td class="c">−2</td><td class="c">3</td><td><em>Trained:</em> the penalty becomes −1</td></tr>
+    </tbody>
+  </table>
+
+  <div class="foot">Parry — a Revelry project · gear list in active development</div>
+</div>
+</body>
+</html>

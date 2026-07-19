@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PARRY — Character Sheet</title>
+<style>
+/* ===== PARRY — shared site styling =====
+   Palette: cold steel & ash, lit by ember firelight, cool blue counterpoint. */
+:root{
+  --void:#101317; --panel:#1c2024; --panel2:#242a2e; --panel3:#171b1f;
+  --line:#343c43; --line2:#4d5860;
+  --ink:#eae8e3; --dim:#b3babf; --faint:#8d959b;
+  --gold:#c9702f; --gold2:#efa661;
+  --ember:#c9682c; --blood:#bf4429;
+  --ash:#8fb0d4;
+}
+*{box-sizing:border-box}
+html,body{background:var(--void)}
+body{
+  margin:0;color:var(--ink);
+  font:16px/1.6 "Iowan Old Style","Palatino Linotype","Georgia",serif;
+  background:
+    radial-gradient(1300px 760px at 50% -12%, #3a2c22 0%, transparent 60%),
+    radial-gradient(1000px 560px at 50% 112%, #1b242c 0%, transparent 62%),
+    var(--void);
+  background-attachment:fixed;
+}
+h1,h2,h3,h4{font-family:"Cinzel","Trajan Pro","Georgia",serif;margin:0;letter-spacing:.12em}
+a{color:var(--gold2);text-decoration:none}
+a:hover{color:#ffd9a8}
+
+/* ---- nav ---- */
+.nav{
+  position:sticky;top:0;z-index:40;backdrop-filter:blur(6px);
+  background:linear-gradient(180deg,rgba(16,19,23,.96),rgba(16,19,23,.82));
+  border-bottom:1px solid var(--line2);
+}
+.nav .in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:26px;padding:13px 20px;flex-wrap:wrap}
+.nav .brand{font-family:"Cinzel",Georgia,serif;font-size:19px;letter-spacing:.3em;color:var(--gold2);text-transform:uppercase}
+.nav a.lnk{
+  font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);
+  padding-bottom:2px;border-bottom:1px solid transparent
+}
+.nav a.lnk:hover{color:var(--gold2)}
+.nav a.lnk.on{color:var(--gold2);border-bottom-color:var(--gold)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:34px 20px 70px}
+.narrow{max-width:900px}
+
+/* ---- headings ---- */
+h1.page{font-size:34px;color:var(--gold2);text-transform:uppercase;text-shadow:0 0 22px rgba(201,112,47,.28)}
+.lede{color:var(--dim);font-size:17px;font-style:italic;margin-top:10px;max-width:70ch}
+h2.sec{
+  font-size:13px;color:var(--gold);text-transform:uppercase;letter-spacing:.26em;
+  padding-bottom:8px;margin:44px 0 18px;border-bottom:1px solid var(--line2);position:relative
+}
+h2.sec::after{content:"";position:absolute;left:0;bottom:-1px;width:46px;height:1px;background:var(--gold)}
+h3.sub{font-size:16px;color:var(--ink);margin:26px 0 8px;letter-spacing:.08em}
+
+.rule{display:flex;align-items:center;gap:12px;margin:34px 0;color:var(--line2)}
+.rule::before,.rule::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent)}
+.rule i{width:7px;height:7px;transform:rotate(45deg);background:var(--gold);opacity:.55;display:block}
+
+/* ---- panels & cards ---- */
+.panel{
+  background:linear-gradient(180deg,var(--panel) 0%,var(--panel3) 100%);
+  border:1px solid var(--line);border-radius:3px;padding:22px;position:relative;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03), 0 8px 24px rgba(0,0,0,.5);
+}
+.panel::before,.panel::after{content:"";position:absolute;width:10px;height:10px;border:1px solid var(--line2);opacity:.8}
+.panel::before{top:5px;left:5px;border-right:0;border-bottom:0}
+.panel::after{bottom:5px;right:5px;border-left:0;border-top:0}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:26px}
+.card{
+  display:block;background:linear-gradient(180deg,var(--panel),var(--panel3));
+  border:1px solid var(--line);border-radius:3px;padding:22px;transition:all .16s ease
+}
+.card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.5)}
+.card .t{font-family:"Cinzel",Georgia,serif;font-size:17px;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase}
+.card .d{color:var(--dim);font-size:14px;margin-top:8px;line-height:1.5}
+
+/* ---- tables ---- */
+table{width:100%;border-collapse:collapse;margin:14px 0 6px;font-size:14.5px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{
+  font-family:"Cinzel",Georgia,serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);border-bottom-color:var(--line2)
+}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+td.c{color:var(--gold2);font-family:"Cinzel",Georgia,serif;white-space:nowrap}
+td em,li em{color:var(--ash);font-style:normal}
+.stat{color:var(--gold2);font-family:"Cinzel",Georgia,serif;white-space:nowrap}
+
+/* ---- lists / entries ---- */
+ul{padding-left:20px}
+li{margin-bottom:8px}
+.entry{border-left:2px solid var(--gold);padding:4px 0 4px 14px;margin-bottom:20px;
+  background:linear-gradient(90deg,rgba(201,112,47,.05),transparent)}
+.entry .n{font-family:"Cinzel",Georgia,serif;font-size:16px;color:var(--ink);letter-spacing:.08em}
+.entry .m{color:var(--gold2);font-size:13.5px;margin:3px 0 5px}
+.entry .x{color:var(--dim);font-size:14px}
+.tag{display:inline-block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ash);border:1px solid var(--line2);border-radius:2px;padding:2px 8px;margin-left:8px}
+.note{color:var(--dim);font-size:14px;font-style:italic}
+.callout{border:1px solid var(--line2);background:var(--panel3);border-radius:2px;padding:16px 18px;margin:18px 0;color:var(--dim)}
+.callout b{color:var(--gold2);font-style:normal}
+
+.foot{border-top:1px solid var(--line);margin-top:60px;padding:22px 0 0;color:var(--faint);font-size:13px;text-align:center}
+
+@media (max-width:700px){
+  .nav .in{gap:14px}
+  h1.page{font-size:26px}
+}
+@media print{
+  body{background:#fff;color:#000}
+  .nav,.foot{display:none}
+  .panel,.card{background:#fff;border-color:#999;box-shadow:none}
+  h1.page,h2.sec,.card .t,.entry .n{color:#000;text-shadow:none}
+}
+</style>
+<style>
+  :root{
+    /* palette drawn from the references: cold steel & ash, lit by ember firelight, cool blue counterpoint */
+    --void:#101317; --panel:#1c2024; --panel2:#242a2e; --panel3:#171b1f;
+    --line:#343c43; --line2:#4d5860;
+    --ink:#eae8e3; --dim:#b3babf; --faint:#8d959b;
+    --gold:#c9702f; --gold2:#efa661;      /* ember / firelight */
+    --ember:#c9682c; --blood:#bf4429;     /* fire-red for Grit */
+    --ash:#8fb0d4;                        /* cold steel-blue accent */
+  }
+  *{box-sizing:border-box}
+  html,body{background:var(--void)}
+  body{
+    margin:0;color:var(--ink);padding:26px 20px 60px;
+    font:16px/1.55 "Iowan Old Style","Palatino Linotype","Georgia",serif;
+    background:
+      radial-gradient(1300px 760px at 50% -12%, #3a2c22 0%, transparent 60%),
+      radial-gradient(1000px 560px at 50% 112%, #1b242c 0%, transparent 62%),
+      var(--void);
+    background-attachment:fixed;
+  }
+  h1,h2,h3{font-family:"Cinzel","Trajan Pro","Georgia",serif;margin:0;letter-spacing:.14em}
+  h1{font-size:38px;color:var(--gold2);text-transform:uppercase;text-shadow:0 0 22px rgba(201,112,47,.28)}
+  h2{
+    font-size:11.5px;color:var(--gold);text-transform:uppercase;letter-spacing:.26em;
+    padding-bottom:8px;margin-bottom:14px;border-bottom:1px solid var(--line2);position:relative;
+  }
+  h2::after{content:"";position:absolute;left:0;bottom:-1px;width:46px;height:1px;background:var(--gold)}
+  .wrap{max-width:1180px;margin:0 auto}
+
+  /* ornament */
+  .rule{display:flex;align-items:center;gap:12px;margin:22px 0 20px;color:var(--line2)}
+  .rule::before,.rule::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent)}
+  .rule i{width:7px;height:7px;transform:rotate(45deg);background:var(--gold);opacity:.55;display:block}
+
+  .top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+  .sub{color:var(--faint);font-size:12px;font-style:italic;letter-spacing:.1em;margin-top:4px}
+
+  .panel{
+    background:linear-gradient(180deg,var(--panel) 0%,var(--panel3) 100%);
+    border:1px solid var(--line);border-radius:3px;padding:18px;position:relative;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.03), 0 8px 24px rgba(0,0,0,.5);
+  }
+  .panel::before,.panel::after{content:"";position:absolute;width:10px;height:10px;border:1px solid var(--line2);opacity:.8}
+  .panel::before{top:5px;left:5px;border-right:0;border-bottom:0}
+  .panel::after{bottom:5px;right:5px;border-left:0;border-top:0}
+
+  .grid{display:grid;gap:16px}
+  .c3{grid-template-columns:1fr 1.05fr 1fr}
+  .c2{grid-template-columns:1.15fr 1fr}
+
+  input,select,textarea{
+    background:var(--panel3);border:1px solid var(--line);color:var(--ink);border-radius:2px;
+    padding:8px 9px;font:inherit;font-size:14px;width:100%
+  }
+  select{cursor:pointer}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 1px rgba(201,112,47,.25)}
+  label{display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+  .field{margin-bottom:14px}
+
+  /* attributes */
+  .attrs{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .attr{background:var(--panel3);border:1px solid var(--line);border-radius:2px;padding:11px 6px;text-align:center}
+  .attr .nm{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  .attr .val{font-size:34px;color:var(--gold2);line-height:1.05;font-family:"Cinzel",Georgia,serif;text-shadow:0 0 14px rgba(201,112,47,.25)}
+  .stp{display:flex;gap:5px;justify-content:center;margin-top:5px}
+  .stp button{background:#252b30;border:1px solid var(--line2);color:var(--dim);width:28px;height:24px;border-radius:2px;cursor:pointer;font-size:14px;line-height:1}
+  .stp button:hover{border-color:var(--gold);color:var(--gold2)}
+  .attr .note{font-size:11px;color:var(--dim);margin-top:7px;min-height:34px;line-height:1.4}
+  .pool{text-align:center;margin-top:12px;font-size:12px;color:var(--dim);letter-spacing:.06em}
+  .pool b{color:var(--gold2)} .pool.over b{color:#c04a45}
+
+  /* big values */
+  .bigs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+  .big{
+    background:var(--panel3);border:1px solid var(--line2);border-radius:2px;padding:12px 8px;text-align:center;position:relative;
+    box-shadow:inset 0 0 26px rgba(201,112,47,.05)
+  }
+  .big .lbl{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
+  .big .num{font-size:44px;line-height:1.05;color:var(--ink);font-family:"Cinzel",Georgia,serif}
+  .big .brk{font-size:11.5px;color:var(--dim);letter-spacing:.02em;margin-top:3px}
+
+  /* pip tracks */
+  .track{margin-bottom:14px}
+  .track .hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .track .hd .t{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+  .track .hd .n{font-size:15px;color:var(--gold2);font-family:"Cinzel",Georgia,serif}
+  .pips{display:flex;flex-wrap:wrap;gap:10px}
+  .pip{
+    width:32px;height:32px;border-radius:50%;cursor:pointer;
+    border:2px solid #4b555d;background:radial-gradient(circle at 34% 28%, #262c31, #12161a);
+    transition:all .12s ease;box-shadow:inset 0 2px 6px rgba(0,0,0,.7)
+  }
+  .pip:hover{border-color:var(--gold2);transform:scale(1.07)}
+  /* Grit — ember firelight */
+  .pip.on{
+    border-color:#ef9552;
+    background:radial-gradient(circle at 34% 28%, #f9a95e, #a63f18);
+    box-shadow:0 0 16px rgba(226,124,52,.6), inset 0 2px 5px rgba(255,235,205,.28)
+  }
+  /* Armor — cold steel */
+  .pip.arm.on{
+    border-color:#a9c9ea;
+    background:radial-gradient(circle at 34% 28%, #cfe2f6, #5d7a99);
+    box-shadow:0 0 15px rgba(140,180,225,.5), inset 0 2px 5px rgba(255,255,255,.35)
+  }
+  .mini{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .stat{background:var(--panel3);border:1px solid var(--line);border-radius:2px;padding:9px;text-align:center}
+  .stat .lbl{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  .stat .num{font-size:21px;color:var(--ink);font-family:"Cinzel",Georgia,serif}
+  .stat input{text-align:center;padding:4px;margin-top:3px}
+
+  /* gear */
+  .desc{font-size:13px;color:var(--dim);margin-top:7px;line-height:1.5;min-height:16px}
+  .desc em{color:var(--ash);font-style:normal}
+  .chk{display:flex;align-items:center;gap:7px;margin-top:7px;font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.14em}
+  .chk input{width:auto;cursor:pointer}
+  .chk label{margin:0;font-size:10px;letter-spacing:.14em;cursor:pointer}
+  .locked{opacity:.35;pointer-events:none}
+  .hands{font-size:10px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+
+  /* trait slots */
+  .slot{border-left:2px solid var(--gold);padding-left:11px;margin-bottom:15px;background:linear-gradient(90deg,rgba(201,112,47,.05),transparent)}
+
+  /* dynamic rows */
+  .row{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+  .row input{flex:1}
+  .row .kill{
+    background:#20262a;border:1px solid var(--line2);color:var(--dim);width:30px;height:34px;flex:0 0 30px;
+    border-radius:2px;cursor:pointer;font-size:15px;line-height:1
+  }
+  .row .kill:hover{border-color:var(--blood);color:#c04a45}
+  .add{
+    background:#1e2429;border:1px dashed var(--line2);color:var(--dim);padding:8px 14px;border-radius:2px;cursor:pointer;
+    font:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;width:100%
+  }
+  .add:hover{border-color:var(--gold);color:var(--gold2)}
+  .tag{font-size:12px;color:var(--dim);letter-spacing:.05em;margin-bottom:10px}
+
+  .btns{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px;justify-content:center;align-items:center}
+  .btns button{
+    background:linear-gradient(180deg,#262d33,#171b1f);border:1px solid var(--line2);color:var(--dim);
+    padding:10px 22px;border-radius:2px;cursor:pointer;font:inherit;font-size:11px;letter-spacing:.2em;text-transform:uppercase
+  }
+  .btns button:hover{border-color:var(--gold);color:var(--gold2)}
+  .msg{color:var(--gold2);font-size:11px;letter-spacing:.12em}
+
+  /* maneuvers flyout */
+  .manBtn{
+    width:100%;margin-top:16px;padding:11px;border-radius:2px;cursor:pointer;
+    background:linear-gradient(180deg,#2e2620,#1d1a18);
+    border:1px solid var(--gold);color:var(--gold2);
+    font:inherit;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase
+  }
+  .manBtn:hover{background:linear-gradient(180deg,#3c2f24,#231e1a);color:#ffd9a8;box-shadow:0 0 16px rgba(201,112,47,.22)}
+  #manPanel{
+    position:fixed;top:0;right:0;height:100vh;width:360px;max-width:92vw;z-index:60;
+    background:linear-gradient(180deg,#1e2328 0%,#14181c 100%);
+    border-left:1px solid var(--line2);box-shadow:-16px 0 46px rgba(0,0,0,.65);
+    transform:translateX(104%);transition:transform .26s ease;overflow-y:auto;padding:22px 20px 48px
+  }
+  #manPanel.open{transform:translateX(0)}
+  #manPanel .close{
+    position:absolute;top:12px;right:14px;background:none;border:1px solid var(--line2);
+    color:var(--dim);width:28px;height:28px;border-radius:2px;cursor:pointer;font-size:15px;line-height:1
+  }
+  #manPanel .close:hover{border-color:var(--gold);color:var(--gold2)}
+  .manMode{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ash);margin-bottom:4px}
+  .manMargin{
+    font-size:11.5px;color:var(--dim);line-height:1.6;border:1px solid var(--line);
+    background:var(--panel3);border-radius:2px;padding:9px 11px;margin:12px 0 18px
+  }
+  .manMargin b{color:var(--gold2)}
+  .man{display:flex;gap:11px;align-items:flex-start;margin-bottom:15px}
+  .man .cost{
+    flex:0 0 26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-family:"Cinzel",Georgia,serif;font-size:13px;color:#12161a;
+    background:radial-gradient(circle at 34% 28%, #f9a95e, #c9702f);border:1px solid #efa661;margin-top:1px
+  }
+  .man .body{flex:1}
+  .man .nm{font-family:"Cinzel",Georgia,serif;font-size:14px;color:var(--ink);letter-spacing:.08em}
+  .man .tx{font-size:12.5px;color:var(--dim);line-height:1.45;margin-top:2px}
+  .man .sc{font-size:12px;color:var(--gold2);margin-top:3px;font-style:italic}
+  @media (max-width:960px){.c3,.c2{grid-template-columns:1fr}.attrs{grid-template-columns:repeat(2,1fr)}}
+  @media print{
+    body{background:#fff;color:#000;padding:0}
+    .panel{background:#fff;border-color:#888;box-shadow:none}
+    h1,h2,.big .lbl,.attr .val,.pool b{color:#000;text-shadow:none}
+    .pip{border-color:#666}.pip.on{background:#333}
+    .btns{display:none}
+  }
+</style>
+</head>
+<body>
+<nav class="nav"><div class="in">
+  <span class="brand">Parry</span>
+  <a class="lnk" href="index.html">Home</a>
+  <a class="lnk on" href="sheet.html">Character Sheet</a>
+  <a class="lnk" href="rules.html">Rules</a>
+  <a class="lnk" href="gear.html">Gear</a>
+  <a class="lnk" href="traits.html">Traits</a>
+</div></nav>
+
+<div class="wrap">
+
+  <div class="top">
+    <div>
+      <h1>Parry</h1>
+      <div class="sub">— a Revelry project · character sheet —</div>
+    </div>
+    <div style="display:flex;gap:12px;flex:1;min-width:300px;max-width:600px">
+      <div style="flex:2"><label>Name</label><input id="cname" placeholder="Who are you?"></div>
+      <div style="flex:1"><label>Calling</label><input id="calling" placeholder="Knight…"></div>
+      <div style="width:78px"><label>Level</label><input id="level" type="number" value="1" min="1"></div>
+    </div>
+  </div>
+
+  <div class="rule"><i></i></div>
+
+  <div class="grid c3">
+
+    <div class="panel">
+      <h2>Attributes</h2>
+      <div class="attrs" id="attrs"></div>
+      <div class="pool" id="pool"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Combat</h2>
+      <div class="bigs">
+        <div class="big"><div class="lbl">Atk</div><div class="num" id="atkNum">+0</div><div class="brk" id="atkBrk">—</div></div>
+        <div class="big"><div class="lbl">Def</div><div class="num" id="defNum">+0</div><div class="brk" id="defBrk">—</div></div>
+      </div>
+
+      <div class="track">
+        <div class="hd"><span class="t">Grit</span><span class="n" id="gritN">5 / 5</span></div>
+        <div class="pips" id="gritPips"></div>
+      </div>
+      <div class="track">
+        <div class="hd"><span class="t">Armor Slots</span><span class="n" id="armN">0 / 0</span></div>
+        <div class="pips" id="armPips"></div>
+      </div>
+
+      <div class="mini">
+        <div class="stat"><div class="lbl">Movement</div><div class="num" id="move">30 ft</div></div>
+        <div class="stat"><div class="lbl">Hope</div><input id="hope" type="number" value="0"></div>
+      </div>
+      <div class="desc" style="margin-top:11px" id="dNote"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Traits</h2>
+      <div class="tag" id="slotTag">2 slots · swap at rest</div>
+      <div id="traitSlots"></div>
+
+      <h2 style="margin-top:24px">Expertises</h2>
+      <div class="tag" id="expTag">Weapon, armor, knowledge, craft — +1 per point of Intelligence.</div>
+      <div id="expList"></div>
+      <button class="add" onclick="addExp()">+ Add Expertise</button>
+    </div>
+  </div>
+
+  <div class="rule"><i></i></div>
+
+  <div class="grid c2">
+
+    <div class="panel">
+      <h2>Loadout</h2>
+      <div class="hands" id="handNote">— both hands free —</div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <div class="field">
+            <label>Main Hand — primary (sets Atk / Def)</label>
+            <select id="w1"></select>
+            <div class="desc" id="w1d"></div>
+            <div class="chk"><input type="checkbox" id="w1e"><label for="w1e">Expertise</label></div>
+            <div class="chk" id="versWrap" style="display:none"><input type="checkbox" id="vers"><label for="vers">Wield one-handed (versatile)</label></div>
+          </div>
+        </div>
+        <div>
+          <div class="field" id="offWrap">
+            <label>Off Hand — weapon or shield</label>
+            <select id="w2"></select>
+            <div class="desc" id="w2d"></div>
+            <div class="chk"><input type="checkbox" id="w2e"><label for="w2e">Expertise</label></div>
+          </div>
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>Armor (body)</label>
+        <select id="ar"></select>
+        <div class="desc" id="ard"></div>
+        <div class="chk"><input type="checkbox" id="are"><label for="are">Trained (armor expertise)</label></div>
+      </div>
+      <button class="manBtn" onclick="toggleMan()">◆ Maneuvers</button>
+    </div>
+
+    <div class="panel">
+      <h2>Wounds</h2>
+      <div class="tag">Each wound lowers your maximum Grit by 1 until treated.</div>
+      <div id="woundList"></div>
+      <button class="add" onclick="addWound()">+ Take a Wound</button>
+    </div>
+  </div>
+
+  <div class="rule"><i></i></div>
+
+  <div class="panel">
+    <h2>Notes &amp; Inventory</h2>
+    <textarea id="notes" style="min-height:90px;resize:vertical" placeholder="Gear, gold, bonds, goals, the thing you're hunting…"></textarea>
+  </div>
+
+  <div class="btns">
+    <button onclick="save()">Save</button>
+    <button onclick="load()">Load</button>
+    <button onclick="window.print()">Print</button>
+    <button onclick="wipe()">Clear</button>
+    <span class="msg" id="msg"></span>
+  </div>
+</div>
+
+<aside id="manPanel">
+  <button class="close" onclick="toggleMan(false)">×</button>
+  <h2 style="margin-bottom:6px">Maneuvers</h2>
+  <div class="manMode" id="manMode">— melee —</div>
+  <div class="manMargin">
+    Spend points from your margin of success:<br>
+    <b>1–4</b> over their defense → <b>1 point</b><br>
+    <b>5–9</b> → <b>2 points</b> &nbsp;·&nbsp; <b>10+</b> → <b>3 points</b>
+  </div>
+  <div id="manList"></div>
+</aside>
+
+<script>
+/* ================= DATA ================= */
+const ATTRS=[
+  ["str","Strength","Heavy/Medium atk &amp; def · +5ft Shove &amp; Drive Back"],
+  ["dex","Dexterity","Light/Medium atk &amp; def · +5ft move · +1 Setup"],
+  ["int","Intelligence","+1 Expertise per point"],
+  ["wil","Willpower","+1 Grit per point"],
+  ["awa","Awareness","Ranged atk &amp; def"],
+  ["cha","Charisma","+1 Grit/Hope on Rally"]
+];
+// t: L light(Dex) · M medium(Str/Dex) · H heavy(Str) · R ranged(Awa) ; h: hands ; v: versatile
+const WEAPONS=[
+  {n:"— none —",t:"",a:0,d:0,h:0,x:""},
+  {n:"Dagger",t:"L",a:1,d:1,h:1,x:"Concealable · Throwable 15/30ft. <em>(Exp) Opening:</em> a hit arms a Setup."},
+  {n:"Rapier",t:"L",a:1,d:2,h:1,x:"Defensive: Guard as a free action once per turn. <em>(Exp) Masterful Guard:</em> defense die counts one higher or lower for a Perfect Parry."},
+  {n:"Paring Blade",t:"L",a:1,d:1,h:1,x:"Off-hand: once per turn arm a Setup in melee. <em>(Exp) Pairing:</em> while dual-wielding, add this weapon's stats to your primary."},
+  {n:"Hand Axe",t:"L",a:2,d:0,h:1,x:"Throwable 30/60ft. <em>(Exp) At the Ready:</em> draw/stow free; a thrown hit arms a Setup."},
+  {n:"Shortsword",t:"M",a:2,d:2,h:1,x:"Off-hand: once per turn arm a Setup. <em>(Exp) Versatile:</em> shift Aggressive (+3/+1) or Defensive (+1/+3)."},
+  {n:"Mace",t:"M",a:2,d:1,h:1,x:"Impact: costs two Armor Slots to reduce. <em>(Exp) Guard Break:</em> 2+ Grit → target's next attack at disadvantage."},
+  {n:"Spear",t:"M",a:2,d:2,h:1,x:"Reach 10ft. <em>(Exp) Holding Ground:</em> a target entering your reach is Set up."},
+  {n:"Saber",t:"M",a:2,d:2,h:1,x:"Quick Draw: draw free. <em>(Exp) Redirect:</em> a successful defense arms a Setup (stacks)."},
+  {n:"Long Sword",t:"H",a:3,d:1,h:2,v:{a:2,d:2},x:"Versatile: one-handed for +2/+2. <em>(Exp) Redouble:</em> miss by ≤3 → spend a Hope to attack again at disadvantage."},
+  {n:"Warhammer",t:"H",a:3,d:-2,h:2,x:"Shieldbreaker: target gains no shield Def. <em>(Exp) Stagger:</em> on a 10+ margin the target can't spend Armor Slots until its next turn."},
+  {n:"Poleaxe",t:"H",a:3,d:1,h:2,x:"Reach 15ft. <em>(Exp) Hook:</em> on a hit, arm a Setup or knock prone."},
+  {n:"Battleaxe",t:"H",a:3,d:0,h:2,x:"Demolition: double damage to objects. <em>(Exp) Rend:</em> spend 2 points to inflict a Bleeding Wound (1 Grit/turn, DC 16)."},
+  {n:"Shortbow",t:"R",a:2,d:0,h:2,x:"Range 60/100ft · Reload · −3 Def in melee. <em>(Exp) Swift Quiver:</em> ignore Reload."},
+  {n:"Longbow",t:"R",a:3,d:0,h:2,x:"Range 100/150ft · Reload · −3 Def in melee. <em>(Exp) Aim:</em> aim free once per turn."},
+  {n:"Crossbow",t:"R",a:3,d:0,h:2,x:"Range 60/100ft · Reload · −2 Def in melee. <em>(Exp) Braced Shot:</em> if you didn't move, ignore Reload; a Wound also deals 1 Grit."}
+];
+const SHIELDS=[
+  {n:"Buckler",d:1,s:1,mv:0,x:"Def +1 · 1 Armor Slot."},
+  {n:"Heater Shield",d:2,s:2,mv:-5,x:"Def +2 · 2 Armor Slots · −5ft movement."},
+  {n:"Pavise Shield",d:3,s:3,mv:-10,x:"Def +3 · 3 Armor Slots · −10ft movement."}
+];
+const ARMORS=[
+  {n:"— none —",d:0,s:0,x:"",e:0},
+  {n:"Padded Leather",d:0,s:1,x:"Def +0 · 1 Armor Slot. <em>(Exp) Presentable.</em>",e:0},
+  {n:"Chainmail",d:-1,s:2,x:"Def −1 · 2 Armor Slots. <em>(Exp) Trained:</em> lose the −1 penalty.",e:1},
+  {n:"Platemail",d:-2,s:3,x:"Def −2 · 3 Armor Slots. <em>(Exp) Trained:</em> penalty becomes −1.",e:1}
+];
+const TRAITS=[
+  {n:"— empty —",g:"",x:""},
+  {n:"Guardbreaker",g:"Aggression",x:"Hits dealing 3+ Grit raise Poise by an extra point; forced movement builds Poise per 5ft instead of per 10ft."},
+  {n:"Bloodletter",g:"Aggression",x:"Your Wound maneuver costs 2 points instead of 3."},
+  {n:"Overwhelm",g:"Aggression",x:"Once per scene, spend a Hope: your next attack builds double Poise and can't be Perfect Parried."},
+  {n:"Duelist's Eye",g:"Defense",x:"Your defense die counts as one higher or lower when checking for a Perfect Parry."},
+  {n:"Ironclad",g:"Defense",x:"+1 Armor Slot innately, and recover an Armor Slot whenever you rest."},
+  {n:"Bulwark",g:"Defense",x:"While wielding a shield, allies within reach gain +1 Def."},
+  {n:"Battle Trance",g:"Tempo",x:"Once per scene, when an odd roll would flip initiative, you keep it instead."},
+  {n:"Momentum",g:"Tempo",x:"The first attack you make each time initiative shifts to your team is at advantage."},
+  {n:"Field Medic",g:"Command",x:"Treat a Wound mid-combat as an action (DC by severity); your Rally also clears one Wound from an ally in reach."},
+  {n:"Warleader",g:"Command",x:"Once per scene, arm a Setup on every ally within reach."},
+  {n:"Inspiring Presence",g:"Command",x:"Your Rally maneuver affects one additional ally."},
+  {n:"Coordinated Strike",g:"Command",x:"When you attack a target that already has a Setup, you gain +1 to that attack."},
+  {n:"Hardy",g:"Survivor",x:"+2 to your maximum Grit."},
+  {n:"Second Wind",g:"Survivor",x:"Your Recomposure recovery roll succeeds on a 13+ instead of 16."},
+  {n:"Adrenaline",g:"Survivor",x:"While at half Grit or below, you gain +1 to attack rolls."},
+  {n:"Undying",g:"Survivor",x:"Once per rest, when you would make a Death Move, you instead stay up at 1 Grit."}
+];
+
+/* ---- maneuvers (s = live value scaled off your attributes) ---- */
+const MELEE=[
+ {c:1,n:"Strike",t:"Deal 1 Grit."},
+ {c:1,n:"Shove",t:"Move the target in a direction of your choice.",s:a=>`${5+5*a.str} ft &nbsp;(5 + 5 × Str)`},
+ {c:1,n:"Opening",t:"Arm a Setup — a penalty to the target's next defense. Expires after the next action, used or not.",s:a=>`−${2+a.dex} &nbsp;(−2, −1 more per Dex)`},
+ {c:1,n:"Feint",t:"Your next attack against this target has advantage. An attack already benefiting from Feint can't Feint again."},
+ {c:2,n:"Disarm",t:"The target's weapon drops. Recovering it costs them an action if they stay where they are.",s:a=>a.dex?`flung ${5*a.dex} ft away &nbsp;(5 ft per Dex)`:"drops at their feet"},
+ {c:2,n:"Trip",t:"Knock the target prone."},
+ {c:2,n:"Drive Back",t:"Drive the target backward. Slammed into something solid, they take 1 Grit per 10 ft they couldn't travel.",s:a=>`${10+5*a.str} ft &nbsp;(10 + 5 × Str)`},
+ {c:2,n:"Sunder",t:"Burn one of the target's Armor Slots."},
+ {c:2,n:"Rally",t:"You or an ally within reach clears Grit, or gains Hope.",s:a=>`${1+a.cha} Grit or Hope &nbsp;(1 + Cha)`},
+ {c:3,n:"Wound",t:"Inflict a Wound — you name its functional effect. Lowers their maximum Grit by 1 until treated.",b:1}
+];
+const RANGED=[
+ {c:1,n:"Strike",t:"Deal 1 Grit."},
+ {c:1,n:"Suppress",t:"The target takes −2 on its next action roll if it moves from where it stands."},
+ {c:1,n:"Mark",t:"Arm a Setup — a penalty to the target's next defense. Expires after the next action, used or not.",s:a=>`−${2+a.dex} &nbsp;(−2, −1 more per Dex)`},
+ {c:2,n:"Disarm",t:"The target's weapon drops. Recovering it costs them an action if they stay where they are."},
+ {c:2,n:"Sunder",t:"Burn one of the target's Armor Slots."},
+ {c:2,n:"Trip",t:"Knock the target prone."},
+ {c:2,n:"Knockback",t:"Throw the target backward. Slammed into something solid, they take 1 Grit per 10 ft they couldn't travel.",s:a=>`${10+5*a.str} ft &nbsp;(10 + 5 × Str)`},
+ {c:2,n:"Rally",t:"You or an ally within reach clears Grit, or gains Hope.",s:a=>`${1+a.cha} Grit or Hope &nbsp;(1 + Cha)`},
+ {c:3,n:"Wound",t:"Inflict a Wound — you name its functional effect. Lowers their maximum Grit by 1 until treated.",b:1}
+];
+function toggleMan(force){
+  const p=el("manPanel");
+  p.classList.toggle("open", force===undefined ? !p.classList.contains("open") : !!force);
+}
+function renderManeuvers(isRanged){
+  el("manMode").textContent = isRanged ? "— ranged —" : "— melee —";
+  const bl = traitNames().includes("Bloodletter");
+  el("manList").innerHTML=(isRanged?RANGED:MELEE).map(m=>{
+    const cost = (m.b && bl) ? 2 : m.c;
+    const note = (m.b && bl) ? `<div class="sc">Bloodletter: costs 2 instead of 3</div>` : "";
+    const sc = m.s ? `<div class="sc">${m.s(A)}</div>` : "";
+    return `<div class="man"><div class="cost">${cost}</div>
+      <div class="body"><div class="nm">${m.n}</div><div class="tx">${m.t}</div>${sc}${note}</div></div>`;
+  }).join("");
+}
+
+/* ================= STATE ================= */
+const A={str:0,dex:0,int:0,wil:0,awa:0,cha:0};
+// pips START FULL and tick down: these hold how many remain
+let gritLeft=null, armLeft=null, prevGritMax=null, prevArmMax=null;
+const el=id=>document.getElementById(id);
+
+/* ================= BUILD ================= */
+el("attrs").innerHTML=ATTRS.map(([k,n,note])=>`
+  <div class="attr">
+    <div class="nm">${n}</div><div class="val" id="v_${k}">0</div>
+    <div class="stp"><button onclick="bump('${k}',-1)">−</button><button onclick="bump('${k}',1)">+</button></div>
+    <div class="note">${note}</div>
+  </div>`).join("");
+
+el("w1").innerHTML=WEAPONS.map((o,i)=>`<option value="${i}">${o.n}${o.h===2?" (2H)":""}</option>`).join("");
+el("w2").innerHTML=
+  `<option value="n">— none —</option>`+
+  `<optgroup label="One-handed weapons">`+
+    WEAPONS.map((o,i)=>o.h===1?`<option value="w${i}">${o.n}</option>`:"").join("")+
+  `</optgroup><optgroup label="Shields">`+
+    SHIELDS.map((o,i)=>`<option value="s${i}">${o.n}</option>`).join("")+
+  `</optgroup>`;
+el("ar").innerHTML=ARMORS.map((o,i)=>`<option value="${i}">${o.n}</option>`).join("");
+
+el("traitSlots").innerHTML=[1,2,3,4,5].map(i=>`
+  <div class="slot" id="ts${i}" ${i>2?'style="display:none"':''}>
+    <label>Slot ${i}</label>
+    <select id="t${i}">${TRAITS.map((t,j)=>`<option value="${j}">${t.n}${t.g?" · "+t.g:""}</option>`).join("")}</select>
+    <div class="desc" id="t${i}d"></div>
+  </div>`).join("");
+
+function bump(k,d){A[k]=Math.max(0,Math.min(8,A[k]+d));calc()}
+
+/* ---- dynamic rows ---- */
+function addWound(v){
+  const d=document.createElement("div");d.className="row";
+  d.innerHTML=`<input class="wound" placeholder="e.g. Wounded leg — movement halved (treat DC 16)">
+               <button class="kill" onclick="this.parentNode.remove();calc()">×</button>`;
+  el("woundList").appendChild(d);
+  if(v) d.querySelector("input").value=v;
+  calc();
+}
+function addExp(v){
+  const d=document.createElement("div");d.className="row";
+  d.innerHTML=`<input class="expi" placeholder="e.g. Longsword · Chainmail · Ruins Lore">
+               <button class="kill" onclick="this.parentNode.remove();calc()">×</button>`;
+  el("expList").appendChild(d);
+  if(v) d.querySelector("input").value=v;
+  calc();
+}
+
+/* ---- pips ---- */
+// filled pip = still available. Click a filled pip to spend down to it; click an empty one to restore.
+function pips(host,total,left,cls,setter){
+  const h=el(host);h.innerHTML="";
+  for(let i=0;i<total;i++){
+    const p=document.createElement("div");
+    p.className="pip "+cls+(i<left?" on":"");
+    p.title = i<left ? "spend" : "restore";
+    p.onclick=()=>{ setter(i<left ? i : i+1); };
+    h.appendChild(p);
+  }
+  if(total===0) h.innerHTML='<span style="color:var(--faint);font-size:12px">—</span>';
+}
+
+/* ================= CALC ================= */
+function traitNames(){const o=[];for(let i=1;i<=5;i++){const s=el("t"+i);if(s)o.push(TRAITS[+s.value].n)}return o}
+
+function calc(){
+  ATTRS.forEach(([k])=>el("v_"+k).textContent=A[k]);
+  const lvl=Math.max(1,+el("level").value||1);
+  const used=ATTRS.reduce((s,[k])=>s+A[k],0), budget=5+(lvl-1);
+  const p=el("pool");p.className="pool"+(used>budget?" over":"");
+  p.innerHTML=`Points spent <b>${used}</b> / ${budget} · max 3 per attribute at level 1`;
+
+  // main hand (+versatile)
+  const w1i=+el("w1").value; let w1={...WEAPONS[w1i]};
+  el("versWrap").style.display = WEAPONS[w1i].v ? "flex" : "none";
+  const oneH = WEAPONS[w1i].v && el("vers").checked;
+  if(oneH){ w1.a=WEAPONS[w1i].v.a; w1.d=WEAPONS[w1i].v.d; w1.h=1; }
+  el("w1d").innerHTML=w1.x;
+
+  // off hand: locked if main is two-handed
+  const twoH = w1.h===2;
+  el("offWrap").className = "field"+(twoH?" locked":"");
+  if(twoH) el("w2").value="n";
+  const ov=el("w2").value;
+  let off=null, shield=null;
+  if(!twoH && ov[0]==="w") off=WEAPONS[+ov.slice(1)];
+  if(!twoH && ov[0]==="s") shield=SHIELDS[+ov.slice(1)];
+  el("w2d").innerHTML = off?off.x : shield?shield.x : "";
+
+  const ar=ARMORS[+el("ar").value];el("ard").innerHTML=ar.x;
+
+  el("handNote").textContent = twoH ? "◆ two-handed — off hand occupied"
+    : off ? "◆ dual wielding — only the main hand sets Atk / Def"
+    : shield ? "◆ sword &amp; board" : "— off hand free —";
+
+  // governing attribute
+  let gov="—",gv=0;
+  if(w1.t==="L"){gov="Dex";gv=A.dex}
+  else if(w1.t==="H"){gov="Str";gv=A.str}
+  else if(w1.t==="R"){gov="Awa";gv=A.awa}
+  else if(w1.t==="M"){ if(A.str>=A.dex){gov="Str";gv=A.str}else{gov="Dex";gv=A.dex} }
+
+  const tr=traitNames(), has=n=>tr.includes(n);
+
+  // Pairing: off-hand Paring Blade w/ expertise adds its stats
+  let pa=0,pd=0,pairing=false;
+  if(off && off.n==="Paring Blade" && el("w2e").checked){ pa=off.a; pd=off.d; pairing=true; }
+
+  let armDef=ar.d;
+  if(el("are").checked && ar.e) armDef = (ar.n==="Chainmail")?0:-1;
+
+  const shDef=shield?shield.d:0, shSlot=shield?shield.s:0, shMv=shield?shield.mv:0;
+  const atk=gv+w1.a+pa;
+  const def=gv+w1.d+pd+shDef+armDef;
+  el("atkNum").textContent=(atk>=0?"+":"")+atk;
+  el("defNum").textContent=(def>=0?"+":"")+def;
+  el("atkBrk").textContent=`${gov} ${gv>=0?"+":""}${gv} · weapon ${w1.a>=0?"+":""}${w1.a}`+(pairing?` · pairing +${pa}`:"");
+  el("defBrk").textContent=`${gov} ${gv>=0?"+":""}${gv} · wpn ${w1.d>=0?"+":""}${w1.d}`+(pairing?` · pair +${pd}`:"")+` · shld +${shDef} · armr ${armDef>=0?"+":""}${armDef}`;
+
+  // tracks
+  const wounds=document.querySelectorAll("#woundList .row").length;
+  const gritMax=Math.max(1, 5+A.wil+(has("Hardy")?2:0)-wounds);
+  const armMax=Math.max(0, shSlot+ar.s+(has("Ironclad")?1:0));
+  // start full; if max grows, the new pips come in filled; never exceed max
+  if(gritLeft===null){gritLeft=gritMax}else if(prevGritMax!==null&&gritMax>prevGritMax){gritLeft+=gritMax-prevGritMax}
+  if(armLeft===null){armLeft=armMax}else if(prevArmMax!==null&&armMax>prevArmMax){armLeft+=armMax-prevArmMax}
+  gritLeft=Math.max(0,Math.min(gritLeft,gritMax));
+  armLeft=Math.max(0,Math.min(armLeft,armMax));
+  prevGritMax=gritMax; prevArmMax=armMax;
+  el("gritN").textContent=gritLeft+" / "+gritMax;
+  el("armN").textContent=armLeft+" / "+armMax;
+  pips("gritPips",gritMax,gritLeft,"",v=>{gritLeft=v;calc()});
+  pips("armPips",armMax,armLeft,"arm",v=>{armLeft=v;calc()});
+
+  el("move").textContent=(30+A.dex*5+shMv)+" ft";
+
+  const notes=[];
+  if(wounds) notes.push(`<span style="color:#a8443f">${wounds} wound${wounds>1?"s":""} — max Grit reduced by ${wounds}.</span>`);
+  if(w1.t==="R") notes.push("Ranged primary — Def penalty applies in melee.");
+  if(has("Hardy")) notes.push("Hardy: +2 max Grit applied.");
+  if(has("Ironclad")) notes.push("Ironclad: +1 Armor Slot applied.");
+  notes.push("Grit = 5 + Willpower − wounds · Move = 30 + 5×Dex − shield");
+  el("dNote").innerHTML=notes.join("<br>");
+
+  const slots=2+(lvl>=4?1:0)+(lvl>=7?1:0)+(lvl>=10?1:0);
+  el("slotTag").textContent=slots+" slots · swap at rest";
+  for(let i=1;i<=5;i++){const d=el("ts"+i);if(d)d.style.display=i<=slots?"":"none"}
+  for(let i=1;i<=5;i++){const s=el("t"+i);if(s)el("t"+i+"d").innerHTML=TRAITS[+s.value].x}
+
+  const expCount=document.querySelectorAll("#expList .row").length;
+  el("expTag").textContent=`${expCount} listed · you gain +1 per point of Intelligence (Int ${A.int}).`;
+
+  renderManeuvers(w1.t==="R");
+}
+
+/* ================= PERSIST ================= */
+const F=["cname","calling","level","hope","notes","w1","w2","ar","t1","t2","t3","t4","t5"];
+const C=["w1e","w2e","are","vers"];
+function save(){
+  const d={A,gritLeft,armLeft,f:{},c:{},
+    wounds:[...document.querySelectorAll(".wound")].map(i=>i.value),
+    exps:[...document.querySelectorAll(".expi")].map(i=>i.value)};
+  F.forEach(k=>{const e=el(k);if(e)d.f[k]=e.value});
+  C.forEach(k=>{const e=el(k);if(e)d.c[k]=e.checked});
+  try{localStorage.setItem("parry-sheet",JSON.stringify(d));flash("Saved.")}
+  catch(e){flash("Storage unavailable — use Print.")}
+}
+function load(){
+  try{
+    const raw=localStorage.getItem("parry-sheet");if(!raw)return flash("Nothing saved.");
+    const d=JSON.parse(raw);
+    Object.assign(A,d.A||{});
+    gritLeft=(d.gritLeft===undefined?null:d.gritLeft);armLeft=(d.armLeft===undefined?null:d.armLeft);
+    prevGritMax=null;prevArmMax=null;
+    Object.entries(d.f||{}).forEach(([k,v])=>{const e=el(k);if(e)e.value=v});
+    Object.entries(d.c||{}).forEach(([k,v])=>{const e=el(k);if(e)e.checked=v});
+    el("woundList").innerHTML="";(d.wounds||[]).forEach(v=>addWound(v));
+    el("expList").innerHTML="";(d.exps||[]).forEach(v=>addExp(v));
+    calc();flash("Loaded.");
+  }catch(e){flash("Couldn't load.")}
+}
+function wipe(){
+  if(!confirm("Clear the sheet?"))return;
+  Object.keys(A).forEach(k=>A[k]=0);gritLeft=null;armLeft=null;prevGritMax=null;prevArmMax=null;
+  F.forEach(k=>{const e=el(k);if(!e)return;if(e.tagName==="SELECT")e.value=e.id==="w2"?"n":0;else if(k==="level")e.value=1;else if(k==="hope")e.value=0;else e.value=""});
+  C.forEach(k=>el(k).checked=false);
+  el("woundList").innerHTML="";el("expList").innerHTML="";
+  calc();flash("Cleared.");
+}
+function flash(m){el("msg").textContent=m;setTimeout(()=>el("msg").textContent="",2200)}
+
+document.addEventListener("input",calc);
+document.addEventListener("change",calc);
+calc();
+</script>
+</body>
+</html>
